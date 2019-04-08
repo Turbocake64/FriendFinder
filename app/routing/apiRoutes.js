@@ -1,61 +1,65 @@
 var path =require("path");
 
 module.exports = function (app) {
-    // Displays friends
-    app.get("/api/friends", function (req, res) {
-        res.json(friends);
+    // Displays dinner guests
+    app.get("/api/family", function (req, res) {
+        res.json(family);
     });
 
-    // Create New Friends - takes in JSON input
-    app.post("/api/friends", function (req, res) {
+    // Create New dinner guest - takes in JSON input
+    app.post("/api/family", function (req, res) {
         var userInput = req.body;
 
         // declare variable equal to New Friend's scores
         var userResponse = userInput.scores;
 
-        var matchFriend;
+        // the person matched most closely to the user's input
+        var matchThanksgiving;
 
-        var minimumDifference = 776
+        // a variable to compare differences against
+        var minimumDifference = 1104
 
         // loop over scores of each friend to get total.
-        for (let i =0; i < friends.length; i++) {
+        for (let i =0; i < family.length; i++) {
 
-            //compute difference
+            //setting difference between userinput and each dinner guest to 0 before calculating 
             let diff = 0;
-            for (j =0; j < userResponse.length; j++) {
-                diff += Math.abs(friends[i].scores[j] - userResponse[j]);
 
-                if (diff < minimumDifference) {
-                    minimumDifference = diff;
-                    matchFriend = friends[i];
-                };
+            //compute difference between userinput and each dinner guest
+            for (j =0; j < userResponse.length; j++) {
+                diff += Math.abs(family[i].scores[j] - userResponse[j]);
+
+
             };
 
+            // if the difference is less than minimum difference, it becomes the new minimum
+            if (diff < minimumDifference) {
+                minimumDifference = diff;
+                // then the dinner guest becomes the new match
+                matchThanksgiving = family[i];
+            };
+
+            // console logging the results of each comparison
+            console.log("Name: ", family[i].name);
+            console.log("Scores:", family[i].scores);
             console.log("diff: ", diff);
-            console.log("Name: ", friends[i].name);
+            console.log(" <------------------->")
         };
 
-        console.log("Total Difference: ", totalDifference);
-        console.log("Matching Character: ", matchFriend.name);
+        console.log("Matching Character: ", matchThanksgiving.name);
+        console.log("Scores:", matchThanksgiving.scores);
+        console.log("Minimum Difference: ", minimumDifference);      
 
-        // compare new friends vs existing friends.
-
-        // return friend w/ least difference.
-
-        // push match friend to modal on survey page.
-
-        // Using a RegEx Pattern to remove spaces from newCharacter
-        // You can read more about RegEx Patterns later https://www.regexbuddy.com/regex.html
-        
-
+        //console logging userinput
         console.log(userInput);
 
-        res.json(matchFriend);
+        // console logging the match
+        res.json(matchThanksgiving);
 
 
 
         userInput.name = userInput.name.replace(/\s+/g, "").toLowerCase();
-        friends.push(userInput);
+        family.push(userInput);
 
     });
 
